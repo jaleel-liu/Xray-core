@@ -18,6 +18,7 @@ import (
 )
 
 type VLessInboundFallback struct {
+	Name string          `json:"name"`
 	Alpn string          `json:"alpn"`
 	Path string          `json:"path"`
 	Type string          `json:"type"`
@@ -28,7 +29,7 @@ type VLessInboundFallback struct {
 type VLessInboundConfig struct {
 	Clients    []json.RawMessage       `json:"clients"`
 	Decryption string                  `json:"decryption"`
-	Fallback   json.RawMessage         `json:"fallback"`
+	Fallback   *VLessInboundFallback   `json:"fallback"`
 	Fallbacks  []*VLessInboundFallback `json:"fallbacks"`
 }
 
@@ -85,6 +86,7 @@ func (c *VLessInboundConfig) Build() (proto.Message, error) {
 			_ = json.Unmarshal(fb.Dest, &s)
 		}
 		config.Fallbacks = append(config.Fallbacks, &inbound.Fallback{
+			Name: fb.Name,
 			Alpn: fb.Alpn,
 			Path: fb.Path,
 			Type: fb.Type,
