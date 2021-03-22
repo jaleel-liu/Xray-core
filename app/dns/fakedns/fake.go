@@ -1,5 +1,3 @@
-// +build !confonly
-
 package fakedns
 
 import (
@@ -17,7 +15,7 @@ import (
 
 type Holder struct {
 	domainToIP cache.Lru
-	ipRange *gonet.IPNet
+	ipRange    *gonet.IPNet
 
 	config *FakeDnsPool
 }
@@ -43,7 +41,7 @@ func NewFakeDNSHolder() (*Holder, error) {
 	if fkdns, err = NewFakeDNSHolderConfigOnly(nil); err != nil {
 		return nil, newError("Unable to create Fake Dns Engine").Base(err).AtError()
 	}
-	err = fkdns.initialize("240.0.0.0/8", 65535)
+	err = fkdns.initialize(dns.FakeIPPool, 65535)
 	if err != nil {
 		return nil, err
 	}
